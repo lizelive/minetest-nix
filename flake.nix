@@ -1,17 +1,33 @@
 {
   description = "Description for the project";
 
-  inputs.game = {
+  inputs.minetest_game = {
     type = "github";
     owner = "minetest";
     repo = "minetest_game";
     flake = false;
   };
 
+  inputs.minetest_src = {
+    type = "github";
+    owner = "minetest";
+    repo = "minetest";
+    flake = false;
+  };
+
+  inputs.minetest_wasm = {
+    type = "github";
+    owner = "paradust7";
+    repo = "minetest-wasm";
+    ref = "main";
+    flake = false;
+  };
+
   outputs = inputs @ {
     nixpkgs,
     flake-parts,
-    game,
+    minetest_game,
+    minetest_src,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -36,37 +52,32 @@
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.minetestserver;
         formatter = pkgs.alejandra;
-        packages.server = pkgs.minetestserver;
-        packages.minetest = pkgs.callPackage ./package/minetest.nix { };
+        packages.default = pkgs.callPackage ./package/minetest.nix {};
 
-        packages.default = pkgs.linkFarm "server" [ { name = "data"; path = game; } { name = "bin"; path = "${pkgs.minetestserver}/bin"; } ];
+        # packages.default = pkgs.linkFarm "lf" [
+        #   {
+        #     name = "data";
+        #     path = minetest_game;
+        #   }
+        #   {
+        #     name = "bin";
+        #     path = "${pkgs.minetestserver}/bin";
+        #   }
+        # ];
 
-
-        packages.old = pkgs.stdenv.mkDerivation {
-          name = "minetestserver";
-          src = ./.;
-          buildInputs = [pkgs.minetestserver];
-          phases = ["buildPhase"];
-          buildPhase = ''
-            mkdir -p $out/bin
-            ln -s ${pkgs.minetestserver}/bin/minetestserver $out/bin/minetestserver
-            cp -r ${pkgs.minetestserver}/share/ $out/share/
-            chmod +w $out/share/minetest/games/
-            # cp -r $src/ $out/share/minetest/games/ld52/
-            # chmod +w $out/share/minetest/games/ld52/mods/
-          '';
-        };
-      };
-      flake = {
-        # The usual flake attributes can be defined here, including system-
-        # agnostic ones like nixosModule and system-enumerating ones, although
-        # those are more easily expressed in perSystem.
-        outputs.game = game;
-        #   outputs.data = fetchFromGitHub {
-        #   owner = "minetest";
-        #   repo = "minetest_game";
-        #   rev = dataRev;
-        #   sha256 = dataSha256;
+        # packages.old = pkgs.stdenv.mkDerivation {
+        #   name = "minetestserver";
+        #   src = ./.;
+        #   buildInputs = [pkgs.minetestserver];
+        #   phases = ["buildPhase"];
+        #   buildPhase = ''
+        #     mkdir -p $out/bin
+        #     ln -s ${pkgs.minetestserver}/bin/minetestserver $out/bin/minetestserver
+        #     cp -r ${pkgs.minetestserver}/share/ $out/share/
+        #     chmod +w $out/share/minetest/games/
+        #     # cp -r $src/ $out/share/minetest/games/ld52/
+        #     # chmod +w $out/share/minetest/games/ld52/mods/
+        #   '';
         # };
       };
     };
