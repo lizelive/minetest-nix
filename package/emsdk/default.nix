@@ -19,7 +19,7 @@ in
     src = emsdk_src;
     phases = ["installPhase"];
     patches = [./emsdk_emcc.patch ./emsdk_file_packager.patch ./emsdk_dirperms.patch ./emsdk_setlk.patch];
-    nativeBuildInputs = [ python3 ];
+    nativeBuildInputs = [python3];
     installPhase = ''
       $src/emsdk install latest
       $src/emsdk activate latest

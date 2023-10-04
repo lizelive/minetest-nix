@@ -1,5 +1,6 @@
 {
   description = "Description for the project";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
 
   inputs.minetest_game = {
     type = "github";
@@ -53,7 +54,7 @@
         # Equivalent to  inputs'.nixpkgs.legacyPackages.minetestserver;
         formatter = pkgs.alejandra;
         packages.minetest = pkgs.callPackage ./package/minetest.nix {};
-        packages.default = pkgs.callPackage ./package/hello/default.nix {};
+        packages.hello = pkgs.callPackage ./package/hello/default.nix {};
         # packages.default = pkgs.callPackage ./package/emsdk/default.nix {};
         # packages.default = pkgs.linkFarm "lf" [
         #   {

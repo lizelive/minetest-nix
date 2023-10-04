@@ -96,7 +96,7 @@ with lib; let
       env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
       nativeBuildInputs = [cmake doxygen graphviz ninja];
-      
+
       buildInputs =
         [
           irrlichtmtInput
