@@ -17,55 +17,6 @@
         "type": "indirect"
       }
     },
-    "minetest_game": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1696019473,
-        "narHash": "sha256-q1sdV36gTyHIn0fExAiglXEl+hQQWJ82+5S17N2Z2o0=",
-        "owner": "minetest",
-        "repo": "minetest_game",
-        "rev": "34942339c7588cbaf3cbaab3facbe57feaa00e88",
-        "type": "github"
-      },
-      "original": {
-        "owner": "minetest",
-        "repo": "minetest_game",
-        "type": "github"
-      }
-    },
-    "minetest_src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1696372123,
-        "narHash": "sha256-v+AW9BjI1fuC3LGLO7s9VBhX6geJETSp5ZUn5zkkuIQ=",
-        "owner": "minetest",
-        "repo": "minetest",
-        "rev": "8db438130400694c26db87b5149ced2872cb112c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "minetest",
-        "repo": "minetest",
-        "type": "github"
-      }
-    },
-    "minetest_wasm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1693060229,
-        "narHash": "sha256-skoaQi3f6aIiESthWGA1U+iTvxfTWCYmWFNDcSuyF+U=",
-        "owner": "paradust7",
-        "repo": "minetest-wasm",
-        "rev": "801f59d5b688bd9c2307871eded69563dd795862",
-        "type": "github"
-      },
-      "original": {
-        "owner": "paradust7",
-        "ref": "main",
-        "repo": "minetest-wasm",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1696374741,
@@ -103,9 +54,6 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "minetest_game": "minetest_game",
-        "minetest_src": "minetest_src",
-        "minetest_wasm": "minetest_wasm",
         "nixpkgs": "nixpkgs"
       }
     }

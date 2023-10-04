@@ -86,7 +86,7 @@
       cp *.js *.html *.wasm $out/share
     '';
   };
-  app = hello_emscripten;
+  app = xmlmirror;
 in
   writeShellApplication {
     name = "hello";
@@ -98,5 +98,5 @@ in
     '';
   }
 # (nix build .#) && tree result && nix run nixpkgs#python3 -- -m http.server --directory result/share/
-
 # nix run nixpkgs#nix-tree  .#hello
+
