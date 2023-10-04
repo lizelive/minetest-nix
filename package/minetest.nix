@@ -33,8 +33,6 @@
   libX11,
   ninja,
   prometheus-cpp,
-  OpenGL,
-  OpenAL ? openal,
   withTouchSupport ? false,
 }:
 with lib; let
@@ -51,6 +49,7 @@ with lib; let
     sha256,
     dataRev ? version,
     dataSha256,
+    pname ? "minetest",
     buildClient ? true,
     buildServer ? false,
   }: let
@@ -60,16 +59,24 @@ with lib; let
         repo = "minetest";
         inherit rev sha256;
       };
-      data = fetchFromGitHub {
-        owner = "minetest";
-        repo = "minetest_game";
-        rev = dataRev;
-        sha256 = dataSha256;
+      emsdk_src = fetchFromGitHub {
+        owner = "emscripten-core";
+        repo = "emsdk";
+        sha256 = "";
       };
+    };
+    emsdk = stdenv.mkDerivation {
+      name = "emsdk";
+      src = sources.emsdk_src;
+      phases = ["installPhase"];
+      installPhase = ''
+        mkdir -p $out
+        cp -r . $out
+      '';
     };
   in
     stdenv.mkDerivation {
-      pname = "minetest";
+      inherit pname;
       inherit version;
 
       src = sources.src;
@@ -101,14 +108,12 @@ with lib; let
       env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
       nativeBuildInputs = [cmake doxygen graphviz ninja];
-
+      
       buildInputs =
         [
           irrlichtmtInput
           luajit
           jsoncpp
-          gettext
-          freetype
           sqlite
           curl
           bzip2
@@ -117,6 +122,7 @@ with lib; let
           libspatialindex
         ]
         ++ optionals buildClient [
+          # zlib is needed for libpng
           libpng
           libjpeg
           libGLU
@@ -124,6 +130,8 @@ with lib; let
           libogg
           libvorbis
           xorg.libX11
+          gettext
+          freetype
         ]
         ++ optionals buildServer [
           leveldb
@@ -140,16 +148,10 @@ with lib; let
           sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
         '';
 
-      postInstall =
-        lib.optionalString stdenv.isLinux ''
-          mkdir -pv $out/share/minetest/games/minetest_game/
-          cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
-          patchShebangs $out
-        ''
-        + lib.optionalString stdenv.isDarwin ''
-          mkdir -p $out/Applications
-          mv $out/minetest.app $out/Applications
-        '';
+      postInstall = lib.optionalString stdenv.isDarwin ''
+        mkdir -p $out/Applications
+        mv $out/minetest.app $out/Applications
+      '';
 
       meta = with lib; {
         homepage = "http://minetest.net/";
@@ -177,8 +179,7 @@ with lib; let
       // {
         buildClient = false;
         buildServer = true;
+        pname = "minetestserver";
       });
-in {
-  minetestclient_5 = mkClient v5;
-  minetestserver_5 = mkServer v5;
-}
+in
+  mkServer v5

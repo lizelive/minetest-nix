@@ -52,8 +52,8 @@
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.minetestserver;
         formatter = pkgs.alejandra;
-        packages.default = pkgs.callPackage ./package/minetest.nix {};
-
+        packages.minetest = pkgs.callPackage ./package/minetest.nix {};
+        packages.default = pkgs.callPackage ./package/emsdk/default.nix {};
         # packages.default = pkgs.linkFarm "lf" [
         #   {
         #     name = "data";
