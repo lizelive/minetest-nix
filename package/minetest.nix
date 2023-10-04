@@ -34,6 +34,8 @@
   ninja,
   prometheus-cpp,
   withTouchSupport ? false,
+  withWasm ? false,
+  emscripten,
 }:
 with lib; let
   boolToCMake = b:
@@ -59,20 +61,6 @@ with lib; let
         repo = "minetest";
         inherit rev sha256;
       };
-      emsdk_src = fetchFromGitHub {
-        owner = "emscripten-core";
-        repo = "emsdk";
-        sha256 = "";
-      };
-    };
-    emsdk = stdenv.mkDerivation {
-      name = "emsdk";
-      src = sources.emsdk_src;
-      phases = ["installPhase"];
-      installPhase = ''
-        mkdir -p $out
-        cp -r . $out
-      '';
     };
   in
     stdenv.mkDerivation {
